@@ -4,6 +4,8 @@
 ## Purpose
 * Provides new topic listening at runtime.
 * Spring-kafka's @KafkaListener not provide new topic listening at runtime.
+* So, if we use Spring-kafka's @KafkaListener, we should change source code and restart application.
+* This project has no code change and no restart !
 
 
 ## How to use ?
