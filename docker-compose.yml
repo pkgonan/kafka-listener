@@ -1,0 +1,23 @@
+version: '2'
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - 2181:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafkaserver:
+    hostname: kafkaserver
+    container_name: kafkaserver
+    image: 'bitnami/kafka:latest'
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_HOST_NAME=kafkaserver
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    links:
+      - zookeeper:zookeeper
