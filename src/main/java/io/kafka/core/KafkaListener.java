@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * Kafka runtime listener
  *
  * {@link org.springframework.kafka.annotation.KafkaListener} not provide new topic listening at runtime.
- * It provides new topic listening, start, stop at runtime.
+ * It provides new topic registration, de-registration, start, stop at runtime.
  *
  * @author Minkiu Kim
  */

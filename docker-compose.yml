@@ -8,7 +8,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafkaserver:
-    hostname: kafkaserver
+    hostname: localhost
     container_name: kafkaserver
     image: 'bitnami/kafka:latest'
     ports:
@@ -19,5 +19,6 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_HOST_NAME=kafkaserver
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CREATE_TOPICS="Topic1:3:3,Topic2:3:3:compact"
     links:
       - zookeeper:zookeeper
