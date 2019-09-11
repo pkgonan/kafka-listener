@@ -20,16 +20,22 @@ spring:
       concurrency: 1
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       compression-type: lz4
       acks: -1
+      properties:
+        schema.registry.url: http://localhost:8081
+        enable.idempotence: true
     consumer:
       group-id: kafka
       enable-auto-commit: false
       auto-offset-reset: earliest
       max-poll-records: 100
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        isolation.level: read_committed
 
 logging:
   level:
