@@ -74,7 +74,7 @@ public class KafkaListener {
     /** Kafka listener start at runtime **/
     public void start() {
         synchronized (lock) {
-            final Collection<MessageListenerContainer> registeredMessageListenerContainers = registeredTopicMap.values();
+            final Collection<MessageListenerContainer> registeredMessageListenerContainers = getRegisteredMessageListenerContainers();
             registeredMessageListenerContainers.forEach(container -> {
                 if (container.isRunning()) {
                     return;
@@ -87,7 +87,7 @@ public class KafkaListener {
     /** Kafka listener stop at runtime **/
     public void stop() {
         synchronized (lock) {
-            final Collection<MessageListenerContainer> registeredMessageListenerContainers = registeredTopicMap.values();
+            final Collection<MessageListenerContainer> registeredMessageListenerContainers = getRegisteredMessageListenerContainers();
             registeredMessageListenerContainers.forEach(container -> {
                 if (!container.isRunning()) {
                     return;
@@ -95,6 +95,10 @@ public class KafkaListener {
                 container.stop();
             });
         }
+    }
+
+    public Map<String, MessageListenerContainer> getRegisteredTopicMap() {
+        return Collections.unmodifiableMap(registeredTopicMap);
     }
 
     private void doRegister(final String topic, final MessageListener messageListener) {
@@ -118,6 +122,10 @@ public class KafkaListener {
     }
 
     private Set<String> getRegisteredTopics() {
-        return Collections.unmodifiableSet(registeredTopicMap.keySet());
+        return registeredTopicMap.keySet();
+    }
+
+    private Collection<MessageListenerContainer> getRegisteredMessageListenerContainers() {
+        return registeredTopicMap.values();
     }
 }
