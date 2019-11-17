@@ -8,11 +8,12 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-group 'io.kafka'
-version '1.0.0.RELEASE'
+project.group = "${artifactGroup}"
+project.version = "${artifactVersion}"
 
 sourceCompatibility = 1.8
 
@@ -23,6 +24,7 @@ repositories {
 }
 
 test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
     useJUnitPlatform()
 }
 
@@ -33,10 +35,30 @@ dependencies {
     compile 'org.springframework.kafka:spring-kafka'
     compile "com.h2database:h2"
 
-    compile "io.confluent:kafka-avro-serializer:5.2.2"
+    compile group: 'com.jfrog.bintray', name: 'com.jfrog.bintray.gradle.plugin', version: '1.8.4'
+
+    compile "io.confluent:kafka-avro-serializer:${kafkaAvroSerializer}"
 
     testImplementation "org.springframework.kafka:spring-kafka-test"
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+bootJar {
+    baseName = "${artifactName}"
+    version =  "${artifactVersion}"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: repoReleaseUrl) {
+                authentication(userName: "${repoUserName}", password: "${repoApiKey}")
+            }
+            pom.groupId = project.group
+            pom.artifactId = project.name
+            pom.version = project.version
+        }
     }
 }
