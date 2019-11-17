@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.listener.MessageListener;
 import org.springframework.kafka.listener.MessageListenerContainer;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -16,9 +17,10 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@EmbeddedKafka(partitions = 1, ports = 9092, topics = KafkaListenerTest.TOPIC)
 class KafkaListenerTest {
 
-    private static String TOPIC = "test-topic";
+    static final String TOPIC = "test-topic";
     private static Supplier<Set<String>> topicSupplier = () -> Stream.of(TOPIC).collect(Collectors.toSet());
     private static Supplier<MessageListener> messageListenerSupplier = () -> (record) -> record.toString();
 
